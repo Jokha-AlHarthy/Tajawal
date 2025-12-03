@@ -1,8 +1,8 @@
-# Tajawal – Travel Planner App
+## Tajawal – Travel Planner App
 Tajawal is a full-stack travel planning application that allows users to create an account, log in, manage their profile, and plan personalized trips. The system includes secure authentication, password reset, profile editing with image upload, budget and airport preferences, and a complete trip-planning flow with dates, destinations, and interests.
 The app supports both light and dark mode, offers a smooth and modern UI, and includes admin tools for managing users and destinations. Built with React, Redux Toolkit, Node.js/Express, and MongoDB, it provides a fast, reliable, and user-friendly travel experience.
 
-# Features
+## Features
 * User Features
 - Create an account and log in
 - Edit profile information and upload a profile picture
@@ -22,7 +22,7 @@ The app supports both light and dark mode, offers a smooth and modern UI, and in
 - Admin dashboard 
 
 
-# Tech Stack
+## Tech Stack
 * Frontend
 - React (Create React App)
 - Redux Toolkit
@@ -38,7 +38,7 @@ The app supports both light and dark mode, offers a smooth and modern UI, and in
 - Bcrypt (password hashing)
 - Nodemailer (reset password email)
 
-# Getting Started
+## Getting Started
 - Install Dependencies (npm install)
 - Run Frontend (npm start)
 - Run Tests (npm test)
