@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login Component Tests matches the UI snapshot 1`] = `
+<div>
+  <div
+    style="position: relative; min-height: 100vh; background: rgb(255, 255, 255);"
+  >
+    <div
+      style="position: absolute; left: 70px; top: 35px; display: flex; align-items: center; gap: 20px; z-index: 5;"
+    >
+      <img
+        alt=""
+        src="logo.png"
+        style="width: 180px;"
+      />
+    </div>
+    <img
+      alt=""
+      src="airplane.png"
+      style="position: absolute; right: 5%; bottom: 5%; width: 45vw; max-width: 900px; z-index: 0; pointer-events: none; opacity: 1;"
+    />
+    <div
+      class="container-fluid"
+    >
+      <div
+        class="justify-content-center align-items-center row"
+        style="min-height: 100vh;"
+      >
+        <div
+          class="d-flex justify-content-center col-md-6"
+        >
+          <form
+            style="width: 520px; height: 700px; background: rgb(255, 255, 255); padding: 50px 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); z-index: 2;"
+          >
+            <h1
+              style="text-align: center; font-weight: 700; color: rgba(0, 0, 0, 0.87); margin-bottom: 10px;"
+            >
+              Log In
+            </h1>
+            <p
+              style="text-align: center; font-size: 18px; color: rgba(0, 0, 0, 0.6); margin-bottom: 80px; font-weight: bold;"
+            >
+              Log in to access your trips
+            </p>
+            <div
+              class="mb-3"
+            >
+              <input
+                class="form-control"
+                name="email"
+                placeholder="Enter your email"
+                style="padding: 12px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.12); background: rgb(255, 255, 255); color: rgba(0, 0, 0, 0.87); font-size: 15px;"
+                type="email"
+              />
+              <p
+                style="color: red;"
+              />
+            </div>
+            <div
+              class="mb-3"
+            >
+              <input
+                class="form-control"
+                name="password"
+                placeholder="Enter your password"
+                style="padding: 12px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.12); background: rgb(255, 255, 255); color: rgba(0, 0, 0, 0.87); font-size: 15px;"
+                type="password"
+              />
+              <p
+                style="color: red;"
+              />
+            </div>
+            <p
+              style="text-align: right; font-size: 15px; color: rgba(0, 0, 0, 0.6); cursor: pointer; font-weight: bold;"
+            >
+              Forgot Password?
+            </p>
+            <div
+              class="text-center mb-3"
+            >
+              <button
+                class="btn btn-secondary"
+                style="width: 30%; padding: 12px; background: rgb(255, 255, 255); border: 2px solid #f5a623; color: rgb(245, 166, 35); font-weight: bold; font-size: 20px; margin-top: 60px; border-radius: 0;"
+                type="submit"
+              >
+                Log In
+              </button>
+            </div>
+            <div
+              class="text-center mb-3"
+            >
+              <p
+                style="text-align: center; margin-top: 30px; font-size: 15px; color: rgba(0, 0, 0, 0.6); cursor: pointer; font-weight: bold;"
+              >
+                Create a new account
+              </p>
+            </div>
+          </form>
+          <div
+            style="position: absolute; top: 35px; right: 70px; cursor: pointer; font-size: 28px; z-index: 10; color: rgba(0, 0, 0, 0.87);"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              stroke-width="0"
+              viewBox="0 0 512 512"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954 0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156 0 0 0 283.211 0c-141.309 0-256 114.511-256 256 0 141.309 114.511 256 256 256z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
