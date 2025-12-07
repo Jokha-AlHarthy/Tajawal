@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", Arial, sans-serif;
+}
+
+body {
+  background-color: #faf7f0;
+}
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 380px;
+  height: 100vh;
+  background: #f2f2f2;
+  padding: 24px;
+  box-shadow: -3px 0 15px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+  z-index: 999;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.side-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.side-panel-content {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+
+.profile-range {
+  appearance: none;
+  width: 100%;
+  height: 10px;                
+  border-radius: 5px;
+  background: linear-gradient(
+    to right,
+    #F5A623 var(--percent),
+    #e0e0e0 var(--percent)
+  );
+  outline: none;
+  padding: 0;                 
+  margin: 0;
+}
+
+.profile-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 22px;
+  width: 22px;
+  background: #F5A623;   
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -2px;           
+}
+
+.profile-range::-moz-range-track {
+  height: 8px;
+  border-radius: 5px;
+  background: #e0e0e0;
+}
+
+
+.profile-range::-moz-range-progress {
+  height: 8px;
+  border-radius: 5px;
+  background: #F5A623;
+}
+
+.profile-range::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  background: #F5A623;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
