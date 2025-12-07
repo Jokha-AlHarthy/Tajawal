@@ -9,9 +9,12 @@ import { useNavigate } from "react-router-dom";
 import airplane from "../assests/airplane.png";
 import Logo from "../assests/logo.png";
 import { resetAuthState, logout } from "../features/UserSlice";
-import { FaMoon, FaSun } from "react-icons/fa";       
-import { useTheme } from "@mui/material/styles";       
-const Login = ({ toggleTheme }) => {                   
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useTheme } from "@mui/material/styles";
+import { setAdmin } from "../features/AdminSlice";
+
+
+const Login = ({ toggleTheme }) => {
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
     const dispatch = useDispatch();
@@ -19,7 +22,7 @@ const Login = ({ toggleTheme }) => {
     const isSuccess = useSelector((state) => state.users.isSuccess);
     const isError = useSelector((state) => state.users.isError);
     const navigate = useNavigate();
-    const theme = useTheme();                        
+    const theme = useTheme();
 
     const {
         register,
@@ -28,6 +31,27 @@ const Login = ({ toggleTheme }) => {
     } = useForm({ resolver: yupResolver(UserLoginValidation) });
 
     const validate = (data) => {
+        const adminEmails = ["teamtajawal@gmail.com", "joker2002187@gmail.com"];
+        if (adminEmails.includes(data.email)) {
+            fetch("http://localhost:8080/admin/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+                .then(async (res) => {
+                    const result = await res.json();
+
+                    if (res.ok && result.admin) {
+                        localStorage.setItem("admin", JSON.stringify(result.admin));
+                        dispatch(setAdmin(result.admin));
+                        navigate("/admin/destinations");
+                    } else {
+                        alert(result.message || "Admin login failed");
+                    }
+                })
+                .catch(() => alert("Admin login error"));
+            return; 
+        }
         dispatch(getUser(data));
     };
 
@@ -38,7 +62,12 @@ const Login = ({ toggleTheme }) => {
 
     useEffect(() => {
         if (isSuccess && user && user.email && !isError) {
-            navigate("/profile");
+            const adminEmails = ["teamtajawal@gmail.com", "joker2002187@gmail.com"];
+            if (adminEmails.includes(user.email)) {
+                navigate("/admin");
+            } else {
+                navigate("/profile");
+            }
         }
     }, [user, isSuccess, isError]);
 
