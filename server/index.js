@@ -3,6 +3,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import UserModel from './models/UserModel.js';
 import TripModel from "./models/TripModel.js";
+import DestinationModel from "./models/DestinationModel.js";
+import AdminModel from "./models/AdminModel.js";
 import bcrypt from 'bcrypt';
 import multer from "multer";
 import crypto from "crypto";
@@ -20,7 +22,7 @@ mongoose.connect(conStr)
   .then(() => console.log("MongoDB connected successfully"))
   .catch(err => console.log("MongoDB error:", err));
 
-//Login API
+//Login API - user & admin
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -43,32 +45,61 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
-//Registration API
-app.post("/register", async (req, res) => {
+app.post("/admin/login", async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email });
-    if (user)
-      return res.status(500).json({ message: "User already exists" });
+    const { email, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const admin = await AdminModel.findOne({ email });
+    if (!admin) return res.status(404).json({ message: "Admin not found" });
 
-    const newUser = new UserModel({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      dateOfBirth: req.body.dateOfBirth,
-      phone: req.body.phone,
-      password: hashedPassword
-    });
+    const passValid = await bcrypt.compare(password, admin.password);
+    if (!passValid) return res.status(401).json({ message: "Invalid credentials" });
 
-    await newUser.save();
-    res.send({ message: "User Registered.." });
-
-  } catch (error) {
-    res.send(error);
+    return res.status(200).json({ message: "Admin login success", admin });
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
+
+
+// Registration API (User + Admin)
+app.post("/register", async (req, res) => {
+  try {
+    const { firstName, lastName, email, dateOfBirth, phone, password } = req.body;
+    const existingUser = await UserModel.findOne({ email });
+    const existingAdmin = await AdminModel.findOne({ email });
+    if (existingUser || existingAdmin) {
+      return res.status(400).json({ message: "Account with this email already exists" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const adminEmails = ["teamtajawal@gmail.com"]; 
+    if (adminEmails.includes(email)) {
+      const newAdmin = new AdminModel({
+        firstName,
+        lastName,
+        email,
+        dateOfBirth,
+        phone,
+        password: hashedPassword,
+      });
+      await newAdmin.save();
+      return res.status(200).json({ message: "Admin registered successfully", role: "admin" });
+    }
+    const newUser = new UserModel({
+      firstName,
+      lastName,
+      email,
+      dateOfBirth,
+      phone,
+      password: hashedPassword,
+    });
+    await newUser.save();
+    res.status(200).json({ message: "User registered successfully", role: "user" });
+  } catch (error) {
+    res.status(500).json({ message: "Registration failed", error });
+  }
+});
+
 
 
 //Forget Password API
@@ -177,7 +208,7 @@ app.post("/planTrip", async (req, res) => {
 });
 
 
-//rest password
+//Rest password API
 app.post("/resetPassword/:token", async (req, res) => {
   try {
     const user = await UserModel.findOne({
@@ -201,6 +232,112 @@ app.post("/resetPassword/:token", async (req, res) => {
     res.status(500).json({ message: "Error resetting password", error });
   }
 });
+
+//Admin Profile - reading API
+app.get("/admin/profile/:email", async (req, res) => {
+    const admin = await AdminModel.findOne({ email: req.params.email });
+    res.send(admin);
+});
+
+
+//Admin profile - updating API
+app.put("/admin/profile/update", upload.single("profilePic"), async (req, res) => {
+    try {
+        const admin = await AdminModel.findOne({ email: req.body.email });
+
+        if (!admin) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+
+        admin.firstName = req.body.firstName;
+        admin.lastName = req.body.lastName;
+        admin.dateOfBirth = req.body.dateOfBirth;
+        admin.phone = req.body.phone;
+        if (req.file) admin.profilePic = req.file.buffer; 
+        await admin.save();
+
+        res.status(200).json({ admin, message: "Success" });
+    } catch (err) {
+        res.status(500).json({ message: "server error", error: err });
+    }
+});
+
+//Reading the user by amdin
+app.get("/admin/users", async (req, res) => {
+    const users = await UserModel.find({});
+    res.send(users);
+});
+
+//Reading the user by amdin
+app.get("/admin/user/:email", async (req, res) => {
+    const user = await UserModel.findOne({ email: req.params.email });
+    res.send(user);
+});
+
+//Updating the user by amdin
+app.put("/admin/user/update", async (req, res) => {
+    try {
+        const user = await UserModel.findOne({ email: req.body.email });
+
+        user.uname = req.body.uname;
+        user.phone = req.body.phone;
+        user.dob = req.body.dob;
+        user.profilepic = req.body.profilepic;
+
+        await user.save();
+        res.status(200).json({ user, message: "Success" });
+
+    } catch (err) {
+        res.status(500).json({ message: "server error" });
+    }
+});
+
+
+//Deleting the user - By admin
+app.delete("/admin/user/delete/:email", async (req, res) => {
+    const user = await UserModel.findOneAndDelete({ email: req.params.email });
+    res.status(200).json({ user, message: "Success" });
+});
+
+
+//Reading the destinations
+app.get("/admin/destinations", async (req, res) => {
+    const dest = await DestinationModel.find({});
+    res.send(dest);
+});
+
+//adding the destination by the admin
+app.post("/admin/destination/add", async (req, res) => {
+    const newDest = new DestinationModel({
+        title: req.body.title,
+        country: req.body.country,
+        category: req.body.category,
+        image: req.body.image
+    });
+
+    await newDest.save();
+    res.status(200).json({ message: "Success" });
+});
+
+//update destination
+app.put("/admin/destination/update", async (req, res) => {
+    const dest = await DestinationModel.findOne({ _id: req.body._id });
+
+    dest.title = req.body.title;
+    dest.country = req.body.country;
+    dest.category = req.body.category;
+    dest.image = req.body.image;
+
+    await dest.save();
+    res.status(200).json({ destination: dest, message: "Success" });
+});
+
+//delete destination
+app.delete("/admin/destination/delete/:id", async (req, res) => {
+    const dest = await DestinationModel.findOneAndDelete({ _id: req.params.id });
+    res.status(200).json({ destination: dest, message: "Success" });
+});
+
 
 app.listen(8080, () => {
   console.log("Tajawal backend is live on port 8080..");
