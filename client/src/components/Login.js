@@ -62,7 +62,7 @@ const Login = ({ toggleTheme }) => {
 
     useEffect(() => {
         if (isSuccess && user && user.email && !isError) {
-            const adminEmails = ["teamtajawal@gmail.com", "joker2002187@gmail.com"];
+            const adminEmails = ["teamtajawal@gmail.com"];
             if (adminEmails.includes(user.email)) {
                 navigate("/admin");
             } else {
