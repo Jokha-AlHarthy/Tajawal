@@ -31,7 +31,7 @@ const Login = ({ toggleTheme }) => {
     } = useForm({ resolver: yupResolver(UserLoginValidation) });
 
     const validate = (data) => {
-        const adminEmails = ["teamtajawal@gmail.com", "joker2002187@gmail.com"];
+        const adminEmails = ["teamtajawal@gmail.com"];
         if (adminEmails.includes(data.email)) {
             fetch("http://localhost:8080/admin/login", {
                 method: "POST",
