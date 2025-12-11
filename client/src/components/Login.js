@@ -23,7 +23,6 @@ const Login = ({ toggleTheme }) => {
     const isError = useSelector((state) => state.users.isError);
     const navigate = useNavigate();
     const theme = useTheme();
-
     const {
         register,
         handleSubmit: submitForm,
@@ -50,7 +49,7 @@ const Login = ({ toggleTheme }) => {
                     }
                 })
                 .catch(() => alert("Admin login error"));
-            return; 
+            return;
         }
         dispatch(getUser(data));
     };
@@ -62,6 +61,8 @@ const Login = ({ toggleTheme }) => {
 
     useEffect(() => {
         if (isSuccess && user && user.email && !isError) {
+            localStorage.setItem("user", JSON.stringify(user));
+
             const adminEmails = ["teamtajawal@gmail.com"];
             if (adminEmails.includes(user.email)) {
                 navigate("/admin");
@@ -70,7 +71,6 @@ const Login = ({ toggleTheme }) => {
             }
         }
     }, [user, isSuccess, isError]);
-
     return (
         <div style={{ position: "relative", minHeight: "100vh", background: theme.palette.background.default }}>
             <div style={{ position: "absolute", left: "70px", top: "35px", display: "flex", alignItems: "center", gap: "20px", zIndex: 5 }}>
