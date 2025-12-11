@@ -5,13 +5,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../features/UserSlice";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+
 const ACCENT = "#F4A83F";
 const PRIMARY = "#1A2B49";
-
 export default function ProfileSettings() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
-  const loggedUser = useSelector(state => state.users.user);
+  const loggedUser =
+    useSelector((state) => state.users.user) ||
+    JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState(null);
@@ -23,7 +25,7 @@ export default function ProfileSettings() {
     email: "",
     dateOfBirth: "",
     phone: "",
-    airport: ""
+    airport: "",
   });
 
   const handlePicChange = (e) => {
@@ -46,10 +48,12 @@ export default function ProfileSettings() {
     formData.append("budget", budget);
 
     if (newFile) formData.append("profilePic", newFile);
-
-    dispatch(updateUser({ id: loggedUser._id, formData }));
+    dispatch(updateUser({ id: loggedUser._id, formData })).then((res) => {
+      if (res.payload?.user) {
+        localStorage.setItem("user", JSON.stringify(res.payload.user));
+      }
+    });
   };
-
   useEffect(() => {
     if (loggedUser) {
       setUser({
@@ -60,11 +64,9 @@ export default function ProfileSettings() {
           ? new Date(loggedUser.dateOfBirth).toISOString().substring(0, 10)
           : "",
         phone: loggedUser.phone || "",
-        airport: loggedUser.airport || ""
+        airport: loggedUser.airport || "",
       });
-
       setBudget(loggedUser.budget || 0);
-
       if (loggedUser.profilePic?.data) {
         const base64String = btoa(
           new Uint8Array(loggedUser.profilePic.data).reduce(
@@ -77,14 +79,13 @@ export default function ProfileSettings() {
       }
     }
   }, [loggedUser]);
-
   return (
     <div
       style={{
         background: theme.palette.background.default,
         minHeight: "100vh",
         padding: "40px",
-        color: theme.palette.text.primary
+        color: theme.palette.text.primary,
       }}
     >
       <Container>
@@ -95,7 +96,7 @@ export default function ProfileSettings() {
                 fontSize: "18px",
                 fontWeight: "600",
                 marginBottom: "10px",
-                color: theme.palette.text.primary
+                color: theme.palette.text.primary,
               }}
             >
               Default Budget Range
@@ -110,7 +111,7 @@ export default function ProfileSettings() {
               className="profile-range"
               style={{
                 "--percent": `${(budget / 10000) * 100}%`,
-                width: "100%"
+                width: "100%",
               }}
             />
 
@@ -119,7 +120,7 @@ export default function ProfileSettings() {
                 fontSize: "16px",
                 fontWeight: "600",
                 marginTop: "5px",
-                color: theme.palette.text.primary
+                color: theme.palette.text.primary,
               }}
             >
               OMR {budget}
@@ -130,7 +131,7 @@ export default function ProfileSettings() {
                 marginTop: "30px",
                 fontSize: "18px",
                 fontWeight: "600",
-                color: theme.palette.text.primary
+                color: theme.palette.text.primary,
               }}
             >
               Default Home Airport
@@ -148,7 +149,7 @@ export default function ProfileSettings() {
                   border: `1px solid ${theme.palette.divider}`,
                   background: isDark ? "#fff" : theme.palette.background.paper,
                   color: isDark ? "#000" : theme.palette.text.primary,
-                  appearance: "none"
+                  appearance: "none",
                 }}
               >
                 <option value="">Select airport...</option>
@@ -171,7 +172,7 @@ export default function ProfileSettings() {
                   transform: "translateY(-50%)",
                   pointerEvents: "none",
                   fontSize: "12px",
-                  color: isDark ? "#000" : theme.palette.text.primary
+                  color: isDark ? "#000" : theme.palette.text.primary,
                 }}
               >
                 ▼
@@ -198,7 +199,6 @@ export default function ProfileSettings() {
                   padding: "10px 28px",
                   fontWeight: "600",
                   borderRadius: "0",
-
                   background: isDark ? "#fff" : PRIMARY,
                   border: isDark ? `2px solid ${ACCENT}` : "none",
                   color: isDark ? ACCENT : "#fff",
@@ -216,7 +216,7 @@ export default function ProfileSettings() {
               borderRadius: theme.shape.borderRadius,
               padding: "40px",
               textAlign: "center",
-              color: theme.palette.text.primary
+              color: theme.palette.text.primary,
             }}
           >
             <div
@@ -224,7 +224,7 @@ export default function ProfileSettings() {
                 position: "relative",
                 width: "120px",
                 height: "120px",
-                margin: "0 auto"
+                margin: "0 auto",
               }}
             >
               <img
@@ -232,8 +232,8 @@ export default function ProfileSettings() {
                   profilePic instanceof File
                     ? URL.createObjectURL(profilePic)
                     : profilePic
-                      ? profilePic
-                      : "https://via.placeholder.com/120"
+                    ? profilePic
+                    : "https://via.placeholder.com/120"
                 }
                 alt="Profile"
                 style={{
@@ -241,7 +241,7 @@ export default function ProfileSettings() {
                   height: "120px",
                   borderRadius: "50%",
                   objectFit: "cover",
-                  background: theme.palette.background.default
+                  background: theme.palette.background.default,
                 }}
               />
 
@@ -258,7 +258,7 @@ export default function ProfileSettings() {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  cursor: "pointer"
+                  cursor: "pointer",
                 }}
               >
                 <FaCamera style={{ color: "#fff", fontSize: "16px" }} />
@@ -272,18 +272,16 @@ export default function ProfileSettings() {
                 style={{ display: "none" }}
               />
             </div>
-
             <div
               style={{
                 fontSize: "18px",
                 fontWeight: "700",
                 marginBottom: "22px",
-                color: theme.palette.text.primary
+                color: theme.palette.text.primary,
               }}
             >
               {user.firstName} {user.lastName}
             </div>
-
             <Row style={{ marginBottom: "14px" }}>
               <Col>
                 <Input
@@ -295,11 +293,10 @@ export default function ProfileSettings() {
                     borderRadius: theme.shape.borderRadius,
                     border: `1px solid ${theme.palette.divider}`,
                     background: theme.palette.background.paper,
-                    color: theme.palette.text.primary
+                    color: theme.palette.text.primary,
                   }}
                 />
               </Col>
-
               <Col>
                 <Input
                   placeholder="Last name"
@@ -310,7 +307,7 @@ export default function ProfileSettings() {
                     borderRadius: theme.shape.borderRadius,
                     border: `1px solid ${theme.palette.divider}`,
                     background: theme.palette.background.paper,
-                    color: theme.palette.text.primary
+                    color: theme.palette.text.primary,
                   }}
                 />
               </Col>
@@ -326,7 +323,7 @@ export default function ProfileSettings() {
                 border: `1px solid ${theme.palette.divider}`,
                 background: theme.palette.background.paper,
                 color: theme.palette.text.primary,
-                marginBottom: "14px"
+                marginBottom: "14px",
               }}
             />
 
@@ -334,14 +331,16 @@ export default function ProfileSettings() {
               <Input
                 type="date"
                 value={user.dateOfBirth}
-                onChange={(e) => setUser({ ...user, dateOfBirth: e.target.value })}
+                onChange={(e) =>
+                  setUser({ ...user, dateOfBirth: e.target.value })
+                }
                 style={{
                   padding: "12px",
                   borderRadius: theme.shape.borderRadius,
                   border: `1px solid ${theme.palette.divider}`,
                   background: theme.palette.background.paper,
                   color: theme.palette.text.primary,
-                  width: "100%"
+                  width: "100%",
                 }}
               />
 
@@ -351,7 +350,7 @@ export default function ProfileSettings() {
                   right: "14px",
                   top: "50%",
                   transform: "translateY(-50%)",
-                  color: theme.palette.text.secondary
+                  color: theme.palette.text.secondary,
                 }}
               />
             </div>
@@ -366,7 +365,7 @@ export default function ProfileSettings() {
                 border: `1px solid ${theme.palette.divider}`,
                 background: theme.palette.background.paper,
                 color: theme.palette.text.primary,
-                marginBottom: "14px"
+                marginBottom: "14px",
               }}
             />
           </Col>
