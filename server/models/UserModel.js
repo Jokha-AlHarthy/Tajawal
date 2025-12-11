@@ -12,7 +12,14 @@ const UserSchema=mongoose.Schema({
     profilePic: { type: Buffer, default: null },
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date },
-
+    feedback: [
+    {
+      rating: Number,
+      category: String,
+      comments: String,
+      createdAt: { type: Date, default: Date.now }
+    }
+  ]
 });
 
 const UserModel=mongoose.model("Users",UserSchema,"Users");
