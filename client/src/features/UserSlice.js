@@ -38,8 +38,22 @@ export const updateUser = createAsyncThunk(
     }
 );
 
+//User feedback
+export const submitFeedback = createAsyncThunk(
+    "users/submitFeedback",
+    async (data, { rejectWithValue }) => {
+        try {
+            const res = await axios.post("http://localhost:8080/user/feedback", data);
+            return res.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data);
+        }
+    }
+);
+
+
 const initVal = {
-    user: {},
+    user: null,
     message: "",
     isLoading: false,
     isSuccess: false,
@@ -62,6 +76,9 @@ export const UserSlice = createSlice({
             state.isSuccess = false;
             state.isError = false;
             state.message = "";
+        },
+        setUser(state, action) {
+        state.user = action.payload;
         }
     },
 
@@ -73,7 +90,7 @@ export const UserSlice = createSlice({
             .addCase(addUser.fulfilled, (state) => {
                 state.isLoading = false;
                 state.message = "Registered Successfully";
-                state.isSuccess = false; 
+                state.isSuccess = false;
             })
 
             .addCase(addUser.rejected, (state, action) => {
@@ -104,9 +121,17 @@ export const UserSlice = createSlice({
             .addCase(updateUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
+            })
+            .addCase(submitFeedback.fulfilled, (state, action) => {
+                state.message = action.payload.message;
+            })
+            .addCase(submitFeedback.rejected, (state, action) => {
+                state.message = action.payload?.message || "Failed to submit feedback";
+                state.isError = true;
             });
+
     }
 });
 
-export const { logout, resetAuthState } = UserSlice.actions;
+export const { logout, resetAuthState, setUser } = UserSlice.actions;
 export default UserSlice.reducer;
