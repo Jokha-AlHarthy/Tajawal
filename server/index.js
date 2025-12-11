@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import UserModel from './models/UserModel.js';
 import TripModel from "./models/TripModel.js";
 import DestinationModel from "./models/DestinationModel.js";
+import Notification from './models/Notification.js';
 import AdminModel from "./models/AdminModel.js";
 import bcrypt from 'bcrypt';
 import multer from "multer";
@@ -177,6 +178,11 @@ app.put("/user/update/:id", upload.single("profilePic"), async (req, res) => {
     const updatedUser = await UserModel.findByIdAndUpdate(uid, updateData, {
       new: true,
     });
+    await Notification.create({
+      userId: uid,
+      title: "Profile Updated",
+      message: "Your profile changes were saved successfully.",
+    });
     res.json({ message: "Updated successfully", user: updatedUser });
   } catch (error) {
     console.log(error);
@@ -185,27 +191,24 @@ app.put("/user/update/:id", upload.single("profilePic"), async (req, res) => {
 });
 
 
-
 // Adding Trip API
 app.post("/planTrip", async (req, res) => {
-  try {
-    const trip = new TripModel({
-      userId: req.body.userId,
-      destination: req.body.destination,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      budget: req.body.budget,
-      travelers: req.body.travelers,
-      interests: req.body.interests,
-    });
-
-    await trip.save();
-    res.status(200).json({ message: "Trip saved", trip });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
+  const trip = new TripModel({
+    userId: req.body.userId,
+    destination: req.body.destination,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    budget: req.body.budget,
+    travelers: req.body.travelers,
+    interests: req.body.interests,
+    lat: req.body.lat,   
+    lng: req.body.lng   
+  });
+  await trip.save();
+  res.status(200).json({ message: "Trip saved", trip });
 });
+
+
 
 
 //Rest password API
@@ -232,6 +235,84 @@ app.post("/resetPassword/:token", async (req, res) => {
     res.status(500).json({ message: "Error resetting password", error });
   }
 });
+
+//User Feedback
+app.post("/user/feedback", async (req, res) => {
+  try {
+    const { userId, rating, category, comments } = req.body;
+
+    const user = await UserModel.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.feedback.push({ rating, category, comments });
+    await user.save();
+
+    res.status(200).json({ message: "Feedback submitted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error submitting feedback", error });
+  }
+});
+
+// Add new notification
+app.post("/notifications/add", async (req, res) => {
+  try {
+    const newNote = await Notification.create(req.body);
+    res.json(newNote);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to add notification" });
+  }
+});
+
+// Get all notifications for a user
+app.get("/notifications/user/:userId", async (req, res) => {
+  try {
+    const notes = await Notification.find({ userId: req.params.userId })
+      .sort({ time: -1 });
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
+
+// Mark notification as read
+app.put("/notifications/read/:id", async (req, res) => {
+  try {
+    const updated = await Notification.findByIdAndUpdate(
+      req.params.id,
+      { read: true },
+      { new: true }
+    );
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to mark as read" });
+  }
+});
+
+// Delete notification
+app.delete("/notifications/delete/:id", async (req, res) => {
+  try {
+    await Notification.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete notification" });
+  }
+});
+
+
+// Get all trips for a user
+app.get("/trips/user/:userId", async (req, res) => {
+  try {
+    const trips = await TripModel.find({ userId: req.params.userId }).sort({ startDate: 1 });
+    if (!trips || trips.length === 0) {
+      return res.status(200).json([]);
+    }
+    res.status(200).json(trips);
+  } catch (err) {
+    console.error("Error fetching trips:", err);
+    res.status(500).json({ message: "Failed to fetch trips" });
+  }
+});
+
 
 //Admin Profile - reading API
 app.get("/admin/profile/:email", async (req, res) => {
@@ -336,6 +417,46 @@ app.put("/admin/destination/update", async (req, res) => {
 app.delete("/admin/destination/delete/:id", async (req, res) => {
     const dest = await DestinationModel.findOneAndDelete({ _id: req.params.id });
     res.status(200).json({ destination: dest, message: "Success" });
+});
+
+// Delete one trip
+app.delete("/trip/delete/:id", async (req, res) => {
+  try {
+    const deleted = await TripModel.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+    res.status(200).json({ message: "Trip deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete trip" });
+  }
+});
+
+//Update the activity
+app.put("/trip/updateActivities/:id", async (req, res) => {
+  try {
+    const updated = await TripModel.findByIdAndUpdate(
+      req.params.id,
+      { activities: req.body.activities },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Itinerary updated", trip: updated });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update itinerary" });
+  }
+});
+
+//Read Uesr trip
+app.get("/trip/:id", async (req, res) => {
+  try {
+    const trip = await TripModel.findById(req.params.id);
+    if (!trip) return res.status(404).json({ message: "Trip not found" });
+
+    res.status(200).json({ trip });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch trip" });
+  }
 });
 
 
