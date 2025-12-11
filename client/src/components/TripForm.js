@@ -9,6 +9,7 @@ import { FaShoppingBasket } from "react-icons/fa";
 import { TbMassage } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { createTrip } from "../features/TripSlice";
+import { addNotificationToDB } from "../features/NotificationSlice";
 import { useTheme } from "@mui/material/styles";
 
 const ACCENT = "#F4A83F";
@@ -30,6 +31,7 @@ export default function TripForm() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const ORANGE = "#F4A83F";
+
   const [tripData, setTripData] = useState({
     destination: "",
     startDate: "",
@@ -62,19 +64,25 @@ export default function TripForm() {
     new Date(tripData.endDate) >= new Date(tripData.startDate) &&
     tripData.budget > 0 &&
     tripData.interests.length > 0;
-
   const handleTripSubmit = async () => {
     if (!tripData.destination) return alert("Please enter a destination.");
     if (!loggedUser || !loggedUser._id) return alert("You must be logged in to create a trip.");
-
-    const finalTrip = { ...tripData, userId: loggedUser._id };
+    const finalTrip = { ...tripData, userId: loggedUser._id, lat, lng };
     const result = await dispatch(createTrip(finalTrip));
 
     if (result.meta.requestStatus === "fulfilled") {
-      nav("/itinerary/1", { state: { tripData } });
-    }
-  };
+      const tripObj = result.payload;
+      localStorage.setItem("lastTrip", JSON.stringify(tripObj));
+      dispatch(addNotificationToDB({
+        userId: loggedUser._id,
+        title: "Itinerary Generated",
+        message: `Your itinerary for ${tripData.destination} is ready!`,
+      }));
 
+      nav("/myTrips", { state: { trip: tripObj } });
+    }
+
+  };
   return (
     <div style={{ background: theme.palette.background.default, minHeight: "100vh", paddingTop: "40px" }}>
       <div style={{ maxWidth: "520px", margin: "0 auto" }}>
@@ -83,7 +91,6 @@ export default function TripForm() {
             <h3 style={{ textAlign: "center", marginBottom: "25px", fontWeight: 600, color: theme.palette.text.primary }}>
               Plan Your Trip
             </h3>
-
             <div ref={countryBoxRef} style={{ marginBottom: "20px" }}>
               <Label style={{ color: theme.palette.text.primary }}>Where do you want to go?</Label>
 
@@ -100,19 +107,12 @@ export default function TripForm() {
                 onClick={() => setCountryOpen(true)}
               >
                 <FiMapPin size={20} color="#777" />
-
                 <Input
                   type="text"
                   placeholder="e.g., Muscat, Oman"
                   value={tripData.destination}
-                  onChange={(e) => {
-                    setTripData({ ...tripData, destination: e.target.value });
-                  }}
-                  style={{
-                    border: "none",
-                    outline: "none",
-                    boxShadow: "none"
-                  }}
+                  onChange={(e) => setTripData({ ...tripData, destination: e.target.value })}
+                  style={{ border: "none", outline: "none", boxShadow: "none" }}
                 />
               </div>
 
@@ -166,7 +166,6 @@ export default function TripForm() {
                 </div>
               )}
             </div>
-
             <FormGroup>
               <Label style={{ color: theme.palette.text.primary }}>When are you travelling?</Label>
 
@@ -208,7 +207,6 @@ export default function TripForm() {
                   </p>
                 )}
             </FormGroup>
-
             <FormGroup style={{ marginTop: "15px" }}>
               <Label style={{ color: theme.palette.text.primary }}>
                 What’s your budget? (OMR)
@@ -228,10 +226,10 @@ export default function TripForm() {
                   height: "8px",
                   borderRadius: "5px",
                   background: `linear-gradient(
-                  to right,
-                  ${isDark ? ORANGE : PRIMARY} ${(tripData.budget / 5000) * 100}%,
-                  ${isDark ? "#3A4A60" : "#e0e0e0"} ${(tripData.budget / 5000) * 100}%
-                )`,
+                    to right,
+                    ${isDark ? ORANGE : PRIMARY} ${(tripData.budget / 5000) * 100}%,
+                    ${isDark ? "#3A4A60" : "#e0e0e0"} ${(tripData.budget / 5000) * 100}%
+                  )`,
                   outline: "none"
                 }}
               />
@@ -247,7 +245,7 @@ export default function TripForm() {
                     cursor: pointer;
                     margin-top: 0px;
                   }
-
+ 
                   input[type="range"]::-moz-range-thumb {
                     height: 18px;
                     width: 18px;
@@ -273,6 +271,7 @@ export default function TripForm() {
               <Label style={{ color: theme.palette.text.primary }}>
                 What are you interested in?
               </Label>
+
               <div
                 style={{
                   display: "grid",
@@ -299,6 +298,7 @@ export default function TripForm() {
                     <FaShoppingBasket size={20} color={isDark ? ORANGE : undefined} />,
                     <RiMovie2Fill size={20} color={isDark ? ORANGE : undefined} />
                   ];
+
                   return (
                     <label
                       key={item}
@@ -325,16 +325,17 @@ export default function TripForm() {
                   );
                 })}
               </div>
+
               {tripData.interests.length === 0 && (
                 <p style={{ color: ERROR_RED, fontSize: "13px" }}>
                   Select at least one interest.
                 </p>
               )}
             </FormGroup>
-
-
             <FormGroup>
-              <Label style={{ color: theme.palette.text.primary }}>How many people are travelling?</Label>
+              <Label style={{ color: theme.palette.text.primary }}>
+                How many people are travelling?
+              </Label>
 
               <div
                 style={{
@@ -398,6 +399,7 @@ export default function TripForm() {
               >
                 Cancel
               </Button>
+
               <Button
                 style={{
                   width: "45%",
@@ -413,7 +415,6 @@ export default function TripForm() {
               >
                 Generate itinerary
               </Button>
-
             </div>
           </CardBody>
         </Card>
