@@ -309,7 +309,7 @@ const Register = ({ toggleTheme }) => {
                         </FormGroup>
                         <div style={{ textAlign: "right", marginTop: "10px" }}>
                             <a
-                                href="/login"
+                                href="https://tajawalclient.onrender.com/login"
                                 style={{
                                     color: theme.palette.text.secondary,
                                     fontWeight: "bold"
