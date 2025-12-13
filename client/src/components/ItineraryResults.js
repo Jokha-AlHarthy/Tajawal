@@ -308,7 +308,7 @@ export default function ItineraryResults() {
   if (!window.confirm("Delete this trip permanently?")) return;
 
   const res = await fetch(
-    `http://localhost:8080/trip/delete/${trip._id}`,
+    `https://tajawalclient.onrender.com/trip/delete/${trip._id}`,
     { method: "DELETE" }
   );
 
@@ -322,7 +322,7 @@ export default function ItineraryResults() {
 };
   const saveGeneratedItinerary = async () => {
     const res = await fetch(
-      `http://localhost:8080/trip/updateActivities/${trip._id}`,
+      `https://tajawalclient.onrender.com/trip/updateActivities/${trip._id}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
