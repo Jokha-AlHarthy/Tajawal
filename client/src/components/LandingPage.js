@@ -188,7 +188,6 @@ const LandingPage = ({ toggleTheme }) => {
                         <Col xs="6" className="d-flex align-items-center" style={{ gap: "20px" }}>
                             <img src={logo} alt="logo" style={{ width: "200px", height: "140px" }} />
                         </Col>
-
                         <Col xs="6" className="d-flex justify-content-end align-items-center" style={{ gap: "28px" }}>
                             <div
                                 onClick={toggleTheme}
