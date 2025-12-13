@@ -107,57 +107,66 @@ app.post("/register", async (req, res) => {
 app.post("/forgotPassword", async (req, res) => {
   try {
     const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(200).json({
         message: "If the email exists, a reset link will be sent."
       });
     }
-
     const token = crypto.randomBytes(20).toString("hex");
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000;
+    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; 
     await user.save();
     const resetURL = `${process.env.FRONTEND_URL}/reset-password/${token}`;
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "teamtajawal@gmail.com",
-        pass: "asbbqpalumordfur"
-      },
-      tls: {
-    rejectUnauthorized: false
-  }
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
     });
-    transporter.verify((err, success) => {
+    transporter.verify((err) => {
       if (err) {
-        console.log("SMTP ERROR:", err);
+        console.error("SMTP VERIFY ERROR:", err);
       } else {
         console.log("SMTP SERVER IS READY");
       }
     });
+    try {
+      await transporter.sendMail({
+        from: `"Tajawal Support" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "Reset your Tajawal password",
+        html: `
+          <h2>Password Reset</h2>
+          <p>Click the link below to reset your password:</p>
+          <a href="${resetURL}" target="_blank">${resetURL}</a>
+          <p>This link expires in 1 hour.</p>
+        `
+      });
 
-    await transporter.sendMail({
-      from: "teamtajawal@gmail.com",
-      to: email,
-      subject: "Reset your Tajawal password",
-      html: `
-        <h2>Password Reset</h2>
-        <p>Click the link below to reset your password:</p>
-        <a href="${resetURL}" target="_blank">${resetURL}</a>
-        <p>This link expires in 1 hour.</p>
-      `
-    });
-    res.status(200).json({
-      message: "Reset link sent to your email",
-      resetLink: resetURL
-    });
+      return res.status(200).json({
+        message: "Reset link sent to your email"
+      });
 
+    } catch (mailError) {
+      console.error("EMAIL SEND ERROR:", mailError);
+      return res.status(500).json({
+        message: "Failed to send reset email",
+        error: mailError.message
+      });
+    }
   } catch (error) {
-    res.status(500).json({ message: "Error sending reset email", error });
+    console.error("FORGOT PASSWORD ERROR:", error);
+    return res.status(500).json({
+      message: "Internal server error"
+    });
   }
 });
-
 
 //User profile API
 const upload = multer({ storage: multer.memoryStorage() });
