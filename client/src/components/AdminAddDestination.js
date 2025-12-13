@@ -10,10 +10,8 @@ const AdminAddDestination = ({ theme }) => {
   const [country, setCountry] = useState("");
   const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const handleSave = () => {
     const data = { title, country, category, image };
     dispatch(addDestination(data)).then((res) => {
@@ -22,7 +20,6 @@ const AdminAddDestination = ({ theme }) => {
       }
     });
   };
-
   const handleCancel = () => navigate("/admin/destinations");
 
   return (
@@ -54,7 +51,6 @@ const AdminAddDestination = ({ theme }) => {
             >
               Add a new Destination
             </h4>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>
                 Destination Name
@@ -66,7 +62,6 @@ const AdminAddDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>
                 Country
@@ -78,7 +73,6 @@ const AdminAddDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>
                 Category
@@ -90,7 +84,6 @@ const AdminAddDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>
                 Image
@@ -102,7 +95,6 @@ const AdminAddDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <div
               style={{
                 marginTop: "35px",
