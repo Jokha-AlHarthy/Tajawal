@@ -308,15 +308,17 @@ const Register = ({ toggleTheme }) => {
                             <p style={{ color: "red" }}>{errors.confirmPassword?.message}</p>
                         </FormGroup>
                         <div style={{ textAlign: "right", marginTop: "10px" }}>
-                            <a
-                                href="https://tajawalclient.onrender.com/login"
-                                style={{
-                                    color: theme.palette.text.secondary,
-                                    fontWeight: "bold"
-                                }}
-                            >
-                                Already have an account? Log in
-                            </a>
+                           <p
+  onClick={() => navigate("/login")}
+  style={{
+    color: theme.palette.text.secondary,
+    fontWeight: "bold",
+    cursor: "pointer"
+  }}
+>
+  Already have an account? Log in
+</p>
+
                         </div>
                         <br />
                         <div style={{ textAlign: "center", marginTop: "30px" }}>
