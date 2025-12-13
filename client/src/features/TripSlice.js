@@ -4,7 +4,7 @@ import axios from "axios";
 //Create trip - Add
 export const createTrip = createAsyncThunk("trips/createTrip",async (tripData, { rejectWithValue }) => {
     try {
-      const res = await axios.post("http://localhost:8080/planTrip", tripData);
+      const res = await axios.post("https://tajawal.onrender.com/planTrip", tripData);
       return res.data.trip;
     } catch (err) {
       return rejectWithValue(err.response?.data);
@@ -15,7 +15,7 @@ export const createTrip = createAsyncThunk("trips/createTrip",async (tripData, {
 //Read Trips - Read
 export const fetchTrips = createAsyncThunk("trips/fetchTrips",async (userId, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`http://localhost:8080/trips/user/${userId}`);
+      const res = await axios.get(`https://tajawal.onrender.com/trips/user/${userId}`);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data);
@@ -27,7 +27,7 @@ export const fetchTrips = createAsyncThunk("trips/fetchTrips",async (userId, { r
 //Delete the trip - delete
 export const deleteTrip = createAsyncThunk("trips/deleteTrip",async (tripId, { rejectWithValue }) => {
     try {
-      const res = await axios.delete(`http://localhost:8080/trip/delete/${tripId}`);
+      const res = await axios.delete(`https://tajawal.onrender.com/trip/delete/${tripId}`);
       return tripId;
     } catch (err) {
       return rejectWithValue(err.response?.data);
