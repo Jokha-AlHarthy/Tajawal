@@ -1,5 +1,3 @@
-// src/components/Admin/AdminAddDestination.jsx
-
 import { Container, Row, Col, FormGroup, Input, Button, Label } from "reactstrap";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
