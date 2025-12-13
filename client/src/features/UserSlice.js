@@ -4,7 +4,7 @@ import axios from "axios";
 // Login Thunk - Read 
 export const getUser = createAsyncThunk("users/getUser", async (udata, { rejectWithValue }) => {
     try {
-        const response = await axios.post("http://localhost:8080/login", udata);
+        const response = await axios.post("https://tajawal.onrender.com/login", udata);
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response?.data || { message: "Login failed" });
@@ -14,7 +14,7 @@ export const getUser = createAsyncThunk("users/getUser", async (udata, { rejectW
 // Register Thunk - Add
 export const addUser = createAsyncThunk("users/addUser", async (udata, { rejectWithValue }) => {
     try {
-        const response = await axios.post("http://localhost:8080/register", udata);
+        const response = await axios.post("https://tajawal.onrender.com/register", udata);
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response?.data);
@@ -25,7 +25,7 @@ export const addUser = createAsyncThunk("users/addUser", async (udata, { rejectW
 export const updateUser = createAsyncThunk("users/updateUser",async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await axios.put(
-                `http://localhost:8080/user/update/${id}`,
+                `https://tajawal.onrender.com/user/update/${id}`,
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
@@ -39,7 +39,7 @@ export const updateUser = createAsyncThunk("users/updateUser",async ({ id, formD
 //User feedback - Add
 export const submitFeedback = createAsyncThunk("users/submitFeedback",async (data, { rejectWithValue }) => {
         try {
-            const res = await axios.post("http://localhost:8080/user/feedback", data);
+            const res = await axios.post("https://tajawal.onrender.com/user/feedback", data);
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data);
