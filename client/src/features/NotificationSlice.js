@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchNotifications = createAsyncThunk(
   "notifications/fetch",
   async (userId) => {
-    const res = await axios.get(`http://localhost:8080/notifications/user/${userId}`);
+    const res = await axios.get(`https://tajawal.onrender.com/notifications/user/${userId}`);
     return res.data;
   }
 );
@@ -14,7 +14,7 @@ export const fetchNotifications = createAsyncThunk(
 export const addNotificationToDB = createAsyncThunk(
   "notifications/add",
   async (data) => {
-    const res = await axios.post("http://localhost:8080/notifications/add", data);
+    const res = await axios.post("https://tajawal.onrender.com/notifications/add", data);
     return res.data;
   }
 );
@@ -23,7 +23,7 @@ export const addNotificationToDB = createAsyncThunk(
 export const markReadInDB = createAsyncThunk(
   "notifications/markRead",
   async (id) => {
-    const res = await axios.put(`http://localhost:8080/notifications/read/${id}`);
+    const res = await axios.put(`https://tajawal.onrender.com/notifications/read/${id}`);
     return res.data;
   }
 );
@@ -32,7 +32,7 @@ export const markReadInDB = createAsyncThunk(
 export const deleteNotificationFromDB = createAsyncThunk(
   "notifications/delete",
   async (id) => {
-    await axios.delete(`http://localhost:8080/notifications/delete/${id}`);
+    await axios.delete(`https://tajawal.onrender.com/notifications/delete/${id}`);
     return id;
   }
 );
