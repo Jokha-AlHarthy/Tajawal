@@ -118,13 +118,16 @@ app.post("/forgotPassword", async (req, res) => {
     user.resetPasswordToken = token;
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save();
-    const resetURL = `http://localhost:3000/reset-password/${token}`;
+    const resetURL = `${process.env.FRONTEND_URL}/reset-password/${token}`;
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: "teamtajawal@gmail.com",
         pass: "asbbqpalumordfur"
-      }
+      },
+      tls: {
+    rejectUnauthorized: false
+  }
     });
     transporter.verify((err, success) => {
       if (err) {
