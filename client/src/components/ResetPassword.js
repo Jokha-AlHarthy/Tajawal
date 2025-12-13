@@ -18,7 +18,7 @@ const ResetPassword = () => {
 
     const onSubmit = async (data) => {
         try {
-            const res = await fetch(`http://localhost:8080/resetPassword/${token}`, {
+            const res = await fetch(`https://tajawalclient.onrender.com/resetPassword/${token}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ password: data.password })
