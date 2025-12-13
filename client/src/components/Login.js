@@ -31,7 +31,7 @@ const Login = ({ toggleTheme }) => {
     const validate = (data) => {
         const adminEmails = ["teamtajawal@gmail.com"];
         if (adminEmails.includes(data.email)) {
-            fetch("http://localhost:8080/admin/login", {
+            fetch("https://tajawalclient.onrender.com/admin/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
