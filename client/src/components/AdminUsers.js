@@ -1,23 +1,17 @@
-// src/components/Admin/AdminUsers.jsx
-
 import { Container, Row, Col, Input, Button } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers, deleteUser } from "../features/AdminSlice";
 import { FaSearch, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
 const AdminUsers = ({ theme }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const users = useSelector((state) => state.admin.users);
-
   const [search, setSearch] = useState("");
-
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
-
   const handleDelete = (email) => {
     if (window.confirm("Are you sure to delete this user?")) {
       dispatch(deleteUser(email)).then(() => {
@@ -74,12 +68,9 @@ const AdminUsers = ({ theme }) => {
                   />
                 </div>
               </Col>
-
               <Col md="1"></Col>
             </Row>
-
             <br />
-            {/* Table Header */}
             <Row
               style={{
                 fontWeight: "bold",
