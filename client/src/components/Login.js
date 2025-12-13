@@ -28,7 +28,6 @@ const Login = ({ toggleTheme }) => {
         handleSubmit: submitForm,
         formState: { errors }
     } = useForm({ resolver: yupResolver(UserLoginValidation) });
-
     const validate = (data) => {
         const adminEmails = ["teamtajawal@gmail.com"];
         if (adminEmails.includes(data.email)) {
@@ -62,7 +61,6 @@ const Login = ({ toggleTheme }) => {
     useEffect(() => {
         if (isSuccess && user && user.email && !isError) {
             localStorage.setItem("user", JSON.stringify(user));
-
             const adminEmails = ["teamtajawal@gmail.com"];
             if (adminEmails.includes(user.email)) {
                 navigate("/admin");
