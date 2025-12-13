@@ -1,5 +1,3 @@
-// src/components/Admin/AdminEditUser.jsx
-
 import { Container, Row, Col, FormGroup, Input, Button, Label } from "reactstrap";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -11,25 +9,20 @@ import { FaFloppyDisk, FaXmark } from "react-icons/fa6";
 
 const AdminEditUser = ({ theme }) => {
   const { email } = useParams();
-
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [dob, setDob] = useState("");
   const [phone, setPhone] = useState("");
   const [profilepic, setProfilepic] = useState("");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   useEffect(() => {
     axios.get(`http://localhost:8080/admin/user/${email}`).then((res) => {
       const u = res.data;
-
       setFname(u.firstName || "");
       setLname(u.lastName || "");
       setDob(u.dateOfBirth?.substring(0, 10) || "");
       setPhone(u.phone || "");
-
       if (u.profilePic && u.profilePic.data) {
         const base64String = btoa(
           new Uint8Array(u.profilePic.data).reduce(
@@ -43,7 +36,6 @@ const AdminEditUser = ({ theme }) => {
       }
     });
   }, [email]);
-
   const handleSave = () => {
     const data = {
       email,
@@ -53,18 +45,13 @@ const AdminEditUser = ({ theme }) => {
       phone,
       profilePic: profilepic
     };
-
-
     dispatch(updateUser(data)).then((res) => {
       if (res.payload && res.payload.message === "Success")
         navigate("/admin/users");
     });
   };
-
   const handleCancel = () => navigate("/admin/users");
-
-  const def_pic =
-    "https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg";
+  const def_pic = "https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg";
 
   return (
     <Container
@@ -110,7 +97,6 @@ const AdminEditUser = ({ theme }) => {
                   />
                 </FormGroup>
               </Col>
-
               <Col md="6">
                 <FormGroup>
                   <Label>Last Name</Label>
@@ -175,7 +161,6 @@ const AdminEditUser = ({ theme }) => {
                 <FaXmark />                
                 Cancel Changes
               </Button>
-
               <Button
                 style={{
                   backgroundColor: "#0C8B4C",
