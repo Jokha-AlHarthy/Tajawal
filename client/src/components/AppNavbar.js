@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import Logo from "../assests/logo.png";
-import {
-  FaHome,
-  FaPlaneDeparture,
-  FaBell,
-  FaUser,
-  FaCommentDots,
-  FaSignOutAlt,
-  FaMoon,
-  FaSun
-} from "react-icons/fa";
+import {FaHome,FaPlaneDeparture,FaBell,FaUser,FaCommentDots,FaSignOutAlt,FaMoon,FaSun} from "react-icons/fa";
 
 const AppNavbar = ({ theme, toggleTheme }) => {
   const [activeItem, setActiveItem] = useState("");
