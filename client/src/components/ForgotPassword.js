@@ -18,23 +18,22 @@ const ForgotPassword = ({ toggleTheme }) => {
         formState: { errors }
     } = useForm({ resolver: yupResolver(ForgotPasswordValidation) });
     const onSubmit = async (data) => {
-        try {
-            const res = await fetch("https://tajawal.onrender.com/forgotPassword", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email: data.email })
-            });
-            const result = await res.json();
-            alert("If this email exists, a reset link will be shown.");
-            if (result.resetLink) {
-                alert("Reset Link:\n" + result.resetLink);
-            }
-        } catch (error) {
-            alert("Something went wrong");
-        }
-    };
+  try {
+    const res = await fetch("https://tajawal.onrender.com/forgotPassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: data.email }),
+    });
+
+    const result = await res.json();
+    alert(result.message);
+  } catch (error) {
+    alert("Something went wrong");
+  }
+};
+
 
     return (
         <div
@@ -117,30 +116,27 @@ const ForgotPassword = ({ toggleTheme }) => {
                             </p>
                             <FormGroup>
                                 <input
-                                    {...register("email", {
-                                        value: email,
-                                        onChange: (e) => setEmail(e.target.value)
-                                    })}
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    className="form-control"
-                                    style={{
-                                        padding: "12px",
-                                        borderRadius: "6px",
-                                        border: `1px solid ${theme.palette.divider}`,
-                                        fontSize: "15px",
-                                        width: "100%",
+  {...register("email")}
+  type="email"
+  placeholder="Enter your email"
+  className="form-control"
+  style={{
+    padding: "12px",
+    borderRadius: "6px",
+    border: `1px solid ${theme.palette.divider}`,
+    fontSize: "15px",
+    width: "100%",
+    background:
+      theme.palette.mode === "dark"
+        ? "#FFFFFF"
+        : theme.palette.background.paper,
+    color:
+      theme.palette.mode === "dark"
+        ? "#000"
+        : theme.palette.text.primary
+  }}
+/>
 
-                                        background:
-                                            theme.palette.mode === "dark"
-                                                ? "#FFFFFF"
-                                                : theme.palette.background.paper,
-                                        color:
-                                            theme.palette.mode === "dark"
-                                                ? "#000"
-                                                : theme.palette.text.primary
-                                    }}
-                                />
                                 <p style={{ color: "red" }}>
                                     {errors.email?.message}
                                 </p>
