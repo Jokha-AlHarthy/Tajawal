@@ -19,7 +19,7 @@ const ForgotPassword = ({ toggleTheme }) => {
     } = useForm({ resolver: yupResolver(ForgotPasswordValidation) });
     const onSubmit = async (data) => {
         try {
-            const res = await fetch("http://localhost:8080/forgotPassword", {
+            const res = await fetch("https://tajawalclient.onrender.com/forgotPassword", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
