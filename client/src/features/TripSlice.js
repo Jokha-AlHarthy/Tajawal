@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const createTrip = createAsyncThunk(
-  "trips/createTrip",
-  async (tripData, { rejectWithValue }) => {
+//Create trip - Add
+export const createTrip = createAsyncThunk("trips/createTrip",async (tripData, { rejectWithValue }) => {
     try {
       const res = await axios.post("http://localhost:8080/planTrip", tripData);
       return res.data.trip;
@@ -13,9 +12,8 @@ export const createTrip = createAsyncThunk(
   }
 );
 
-export const fetchTrips = createAsyncThunk(
-  "trips/fetchTrips",
-  async (userId, { rejectWithValue }) => {
+//Read Trips - Read
+export const fetchTrips = createAsyncThunk("trips/fetchTrips",async (userId, { rejectWithValue }) => {
     try {
       const res = await axios.get(`http://localhost:8080/trips/user/${userId}`);
       return res.data;
@@ -25,9 +23,9 @@ export const fetchTrips = createAsyncThunk(
   }
 );
 
-export const deleteTrip = createAsyncThunk(
-  "trips/deleteTrip",
-  async (tripId, { rejectWithValue }) => {
+
+//Delete the trip - delete
+export const deleteTrip = createAsyncThunk("trips/deleteTrip",async (tripId, { rejectWithValue }) => {
     try {
       const res = await axios.delete(`http://localhost:8080/trip/delete/${tripId}`);
       return tripId;
