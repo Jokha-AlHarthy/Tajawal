@@ -63,7 +63,7 @@ app.post("/admin/login", async (req, res) => {
 });
 
 
-// Registration API (User + Admin)
+// Registration API - User
 app.post("/register", async (req, res) => {
   try {
     const { firstName, lastName, email, dateOfBirth, phone, password } = req.body;
@@ -103,7 +103,7 @@ app.post("/register", async (req, res) => {
 
 
 
-//Forget Password API
+//Forget Password API 
 app.post("/forgotPassword", async (req, res) => {
   try {
     const { email } = req.body;
@@ -236,7 +236,7 @@ app.post("/resetPassword/:token", async (req, res) => {
   }
 });
 
-//User Feedback
+//User Feedback API
 app.post("/user/feedback", async (req, res) => {
   try {
     const { userId, rating, category, comments } = req.body;
@@ -253,7 +253,7 @@ app.post("/user/feedback", async (req, res) => {
   }
 });
 
-// Add new notification
+// Add notification API
 app.post("/notifications/add", async (req, res) => {
   try {
     const newNote = await Notification.create(req.body);
@@ -263,7 +263,7 @@ app.post("/notifications/add", async (req, res) => {
   }
 });
 
-// Get all notifications for a user
+// Get all notifications from the user
 app.get("/notifications/user/:userId", async (req, res) => {
   try {
     const notes = await Notification.find({ userId: req.params.userId })
@@ -274,7 +274,7 @@ app.get("/notifications/user/:userId", async (req, res) => {
   }
 });
 
-// Mark notification as read
+// Mark notification as read API
 app.put("/notifications/read/:id", async (req, res) => {
   try {
     const updated = await Notification.findByIdAndUpdate(
@@ -288,7 +288,7 @@ app.put("/notifications/read/:id", async (req, res) => {
   }
 });
 
-// Delete notification
+// Delete notification API
 app.delete("/notifications/delete/:id", async (req, res) => {
   try {
     await Notification.findByIdAndDelete(req.params.id);
@@ -299,7 +299,7 @@ app.delete("/notifications/delete/:id", async (req, res) => {
 });
 
 
-// Get all trips for a user
+// Get all trips for a user API
 app.get("/trips/user/:userId", async (req, res) => {
   try {
     const trips = await TripModel.find({ userId: req.params.userId }).sort({ startDate: 1 });
@@ -314,7 +314,7 @@ app.get("/trips/user/:userId", async (req, res) => {
 });
 
 
-//Admin Profile - reading API
+//Admin Profile - read API
 app.get("/admin/profile/:email", async (req, res) => {
     const admin = await AdminModel.findOne({ email: req.params.email });
     res.send(admin);
@@ -343,19 +343,19 @@ app.put("/admin/profile/update", upload.single("profilePic"), async (req, res) =
     }
 });
 
-//Reading the user by amdin
+//Reading the user by amdin API
 app.get("/admin/users", async (req, res) => {
     const users = await UserModel.find({});
     res.send(users);
 });
 
-//Reading the user by amdin
+//Reading the user by amdin API
 app.get("/admin/user/:email", async (req, res) => {
     const user = await UserModel.findOne({ email: req.params.email });
     res.send(user);
 });
 
-//Updating the user by amdin
+//Updating the user by amdin API
 app.put("/admin/user/update", async (req, res) => {
     try {
         const user = await UserModel.findOne({ email: req.body.email });
@@ -374,20 +374,20 @@ app.put("/admin/user/update", async (req, res) => {
 });
 
 
-//Deleting the user - By admin
+//Deleting the user - By admin API
 app.delete("/admin/user/delete/:email", async (req, res) => {
     const user = await UserModel.findOneAndDelete({ email: req.params.email });
     res.status(200).json({ user, message: "Success" });
 });
 
 
-//Reading the destinations
+//Reading the destinations API
 app.get("/admin/destinations", async (req, res) => {
     const dest = await DestinationModel.find({});
     res.send(dest);
 });
 
-//adding the destination by the admin
+//adding the destination by the admin API
 app.post("/admin/destination/add", async (req, res) => {
     const newDest = new DestinationModel({
         title: req.body.title,
@@ -400,7 +400,7 @@ app.post("/admin/destination/add", async (req, res) => {
     res.status(200).json({ message: "Success" });
 });
 
-//update destination
+//update destination API
 app.put("/admin/destination/update", async (req, res) => {
     const dest = await DestinationModel.findOne({ _id: req.body._id });
 
@@ -413,13 +413,13 @@ app.put("/admin/destination/update", async (req, res) => {
     res.status(200).json({ destination: dest, message: "Success" });
 });
 
-//delete destination
+//delete destination API
 app.delete("/admin/destination/delete/:id", async (req, res) => {
     const dest = await DestinationModel.findOneAndDelete({ _id: req.params.id });
     res.status(200).json({ destination: dest, message: "Success" });
 });
 
-// Delete one trip
+// Delete one trip API
 app.delete("/trip/delete/:id", async (req, res) => {
   try {
     const deleted = await TripModel.findByIdAndDelete(req.params.id);
@@ -432,7 +432,7 @@ app.delete("/trip/delete/:id", async (req, res) => {
   }
 });
 
-//Update the activity
+//Update the activity API
 app.put("/trip/updateActivities/:id", async (req, res) => {
   try {
     const updated = await TripModel.findByIdAndUpdate(
@@ -447,7 +447,7 @@ app.put("/trip/updateActivities/:id", async (req, res) => {
   }
 });
 
-//Read Uesr trip
+//Read Uesr trip API
 app.get("/trip/:id", async (req, res) => {
   try {
     const trip = await TripModel.findById(req.params.id);
