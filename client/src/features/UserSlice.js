@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Login Thunk
+// Login Thunk - Read 
 export const getUser = createAsyncThunk("users/getUser", async (udata, { rejectWithValue }) => {
     try {
         const response = await axios.post("http://localhost:8080/login", udata);
@@ -11,7 +11,7 @@ export const getUser = createAsyncThunk("users/getUser", async (udata, { rejectW
     }
 });
 
-// Register Thunk
+// Register Thunk - Add
 export const addUser = createAsyncThunk("users/addUser", async (udata, { rejectWithValue }) => {
     try {
         const response = await axios.post("http://localhost:8080/register", udata);
@@ -21,10 +21,8 @@ export const addUser = createAsyncThunk("users/addUser", async (udata, { rejectW
     }
 });
 
-// Update Profile Thunk
-export const updateUser = createAsyncThunk(
-    "users/updateUser",
-    async ({ id, formData }, { rejectWithValue }) => {
+// Update Profile Thunk - Update
+export const updateUser = createAsyncThunk("users/updateUser",async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await axios.put(
                 `http://localhost:8080/user/update/${id}`,
@@ -38,10 +36,8 @@ export const updateUser = createAsyncThunk(
     }
 );
 
-//User feedback
-export const submitFeedback = createAsyncThunk(
-    "users/submitFeedback",
-    async (data, { rejectWithValue }) => {
+//User feedback - Add
+export const submitFeedback = createAsyncThunk("users/submitFeedback",async (data, { rejectWithValue }) => {
         try {
             const res = await axios.post("http://localhost:8080/user/feedback", data);
             return res.data;
