@@ -30,7 +30,7 @@ const AdminEditDestination = ({ theme }) => {
   }, [destinations, id]);
   const handleUpdate = async () => {
     const data = { _id: id, title, country, category, image };
-    const res = await axios.put("https://tajawalclient.onrender.com/admin/destination/update", data);
+    const res = await axios.put("https://tajawal.onrender.com/admin/destination/update", data);
     if (res.data.message === "Success") navigate("/admin/destinations");
   };
   const handleCancel = () => navigate("/admin/destinations");
@@ -146,4 +146,5 @@ const AdminEditDestination = ({ theme }) => {
 };
 
 export default AdminEditDestination;
+
 
