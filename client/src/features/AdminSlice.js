@@ -5,7 +5,7 @@ import axios from "axios";
 //Getting the destination form the database (Read)
 export const getAllDestinations = createAsyncThunk("admin/getAllDestinations", async () => {
     try {
-        const res = await axios.get("http://localhost:8080/admin/destinations");
+        const res = await axios.get("https://tajawal.onrender.com/admin/destinations");
         return res.data;
     } catch (error) {
         console.log(error);
@@ -15,7 +15,7 @@ export const getAllDestinations = createAsyncThunk("admin/getAllDestinations", a
 //Deleteting the destination from the database (Delete)
 export const deleteDestination = createAsyncThunk("admin/deleteDestination", async (did) => {
     try {
-        const res = await axios.delete(`http://localhost:8080/admin/destination/delete/${did}`);
+        const res = await axios.delete(`https://tajawal.onrender.com/admin/destination/delete/${did}`);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -25,7 +25,7 @@ export const deleteDestination = createAsyncThunk("admin/deleteDestination", asy
 //Adding the destination in the database (Add)
 export const addDestination = createAsyncThunk("admin/addDestination", async (data) => {
     try {
-        const res = await axios.post("http://localhost:8080/admin/destination/add", data);
+        const res = await axios.post("https://tajawal.onrender.com/admin/destination/add", data);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -36,7 +36,7 @@ export const addDestination = createAsyncThunk("admin/addDestination", async (da
 //Getting the registred users from the database (Read)
 export const getAllUsers = createAsyncThunk("admin/getAllUsers", async () => {
     try {
-        const res = await axios.get("http://localhost:8080/admin/users");
+        const res = await axios.get("https://tajawal.onrender.com/admin/users");
         return res.data;
     } catch (error) {
         console.log(error);
@@ -47,7 +47,7 @@ export const getAllUsers = createAsyncThunk("admin/getAllUsers", async () => {
 //Deleting the user from the website (Delete)
 export const deleteUser = createAsyncThunk("admin/deleteUser", async (email) => {
     try {
-        const res = await axios.delete(`http://localhost:8080/admin/user/delete/${email}`);
+        const res = await axios.delete(`https://tajawal.onrender.com/admin/user/delete/${email}`);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -58,7 +58,7 @@ export const deleteUser = createAsyncThunk("admin/deleteUser", async (email) => 
 //Update Admin profile (Update)
 export const updateAdminProfile = createAsyncThunk("admin/updateAdminProfile",async (formData) => {
     const res = await axios.put(
-      "http://localhost:8080/admin/profile/update",
+      "https://tajawal.onrender.com/admin/profile/update",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" }
@@ -72,7 +72,7 @@ export const updateAdminProfile = createAsyncThunk("admin/updateAdminProfile",as
 //Updating the user profile (Update)
 export const updateUser = createAsyncThunk("admin/updateUser", async (data) => {
     try {
-        const res = await axios.put("http://localhost:8080/admin/user/update", data);
+        const res = await axios.put("https://tajawal.onrender.com/admin/user/update", data);
         return res.data;
     } catch (error) {
         console.log(error);
