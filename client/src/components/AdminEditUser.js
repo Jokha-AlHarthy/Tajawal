@@ -17,7 +17,7 @@ const AdminEditUser = ({ theme }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    axios.get(`https://tajawalclient.onrender.com/admin/user/${email}`).then((res) => {
+    axios.get(`https://tajawal.onrender.com/admin/user/${email}`).then((res) => {
       const u = res.data;
       setFname(u.firstName || "");
       setLname(u.lastName || "");
@@ -184,4 +184,5 @@ const AdminEditUser = ({ theme }) => {
 };
 
 export default AdminEditUser;
+
 
