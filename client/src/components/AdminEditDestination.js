@@ -1,5 +1,3 @@
-// src/components/Admin/AdminEditDestination.jsx
-
 import { Container, Row, Col, FormGroup, Input, Button, Label } from "reactstrap";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,16 +12,13 @@ const AdminEditDestination = ({ theme }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const destinations = useSelector((state) => state.admin.destinations);
-
   const [title, setTitle] = useState("");
   const [country, setCountry] = useState("");
   const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
-
   useEffect(() => {
     dispatch(getAllDestinations());
   }, [dispatch]);
-
   useEffect(() => {
     const dest = destinations.find((d) => d._id === id);
     if (dest) {
@@ -33,13 +28,11 @@ const AdminEditDestination = ({ theme }) => {
       setImage(dest.image || "");
     }
   }, [destinations, id]);
-
   const handleUpdate = async () => {
     const data = { _id: id, title, country, category, image };
     const res = await axios.put("http://localhost:8080/admin/destination/update", data);
     if (res.data.message === "Success") navigate("/admin/destinations");
   };
-
   const handleCancel = () => navigate("/admin/destinations");
 
   return (
@@ -71,7 +64,6 @@ const AdminEditDestination = ({ theme }) => {
             >
               Edit Destination Information
             </h4>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>Destination Name</Label>
               <Input
@@ -81,7 +73,6 @@ const AdminEditDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>Country</Label>
               <Input
@@ -91,7 +82,6 @@ const AdminEditDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>Category</Label>
               <Input
@@ -101,7 +91,6 @@ const AdminEditDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <FormGroup style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <Label style={{ width: "180px", fontWeight: "600", marginBottom: "0" }}>Image</Label>
               <Input
@@ -111,7 +100,6 @@ const AdminEditDestination = ({ theme }) => {
                 style={{ padding: "12px", borderRadius: "5px" }}
               />
             </FormGroup>
-
             <div
               style={{
                 marginTop: "35px",
