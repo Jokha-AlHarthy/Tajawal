@@ -1,12 +1,7 @@
-// src/components/Admin/AdminDestinations.jsx
-
 import { Container, Row, Col, Input, Button } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllDestinations,
-  deleteDestination
-} from "../features/AdminSlice";
+import { getAllDestinations, deleteDestination } from "../features/AdminSlice";
 import { FaSearch, FaEdit, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -14,13 +9,10 @@ const AdminDestinations = ({ theme }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const destinations = useSelector((state) => state.admin.destinations);
-
   const [search, setSearch] = useState("");
-
   useEffect(() => {
     dispatch(getAllDestinations());
   }, [dispatch]);
-
   const handleDelete = (id) => {
     if (window.confirm("Are you sure to delete this destination?")) {
       dispatch(deleteDestination(id)).then(() => {
@@ -28,11 +20,9 @@ const AdminDestinations = ({ theme }) => {
       });
     }
   };
-
   const handleAdd = () => {
     navigate("/admin/destination/add");
   };
-
   const handleEdit = (id) => {
     navigate(`/admin/destination/edit/${id}`);
   };
@@ -56,7 +46,6 @@ const AdminDestinations = ({ theme }) => {
               boxShadow: "0 0 10px rgba(0,0,0,0.1)"
             }}
           >
-
             <Row className="align-items-center">
               <Col md="12" style={{ display: "flex", justifyContent: "center" }}>
                 <div style={{ position: "relative", width: "70%" }}>
@@ -86,8 +75,6 @@ const AdminDestinations = ({ theme }) => {
                 </div>
               </Col>
             </Row>
-
-
             <div style={{ marginTop: "40px" }}>
               {destinations
                 .filter((d) =>
@@ -113,7 +100,6 @@ const AdminDestinations = ({ theme }) => {
                       style={{ borderRadius: "6px", marginRight: "20px", borderRadius: "0px" }}
                       alt={d.title}
                     />
-
                     <div style={{ flexGrow: 1, color: "black" }}>
                       <b>Destination Name: {d.title}</b>
                       <br />
@@ -121,7 +107,6 @@ const AdminDestinations = ({ theme }) => {
                       <br />
                       Category: {d.category}
                     </div>
-
                     <div
                       style={{
                         display: "flex",
@@ -155,8 +140,6 @@ const AdminDestinations = ({ theme }) => {
                         Delete
                       </Button>
                     </div>
-
-
                   </div>
                 ))}
 
