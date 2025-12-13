@@ -68,7 +68,7 @@ export default function ItineraryEditor() {
         : day
     );
     const res = await fetch(
-      `http://localhost:8080/trip/updateActivities/${trip._id}`,
+      `https://tajawal.onrender.com/trip/updateActivities/${trip._id}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
