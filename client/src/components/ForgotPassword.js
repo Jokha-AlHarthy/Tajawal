@@ -10,7 +10,6 @@ import { FaMoon, FaSun } from "react-icons/fa";
 
 const ForgotPassword = ({ toggleTheme }) => {
     const theme = useTheme();
-    const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const {
         register,
@@ -115,7 +114,7 @@ const ForgotPassword = ({ toggleTheme }) => {
                                 Enter your email and we'll send you a reset link
                             </p>
                             <FormGroup>
-                                <input
+                               <input
   {...register("email")}
   type="email"
   placeholder="Enter your email"
