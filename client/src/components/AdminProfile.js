@@ -1,13 +1,4 @@
-// src/components/Admin/AdminProfile.jsx
-import {
-  Container,
-  Row,
-  Col,
-  FormGroup,
-  Input,
-  Button,
-  Label
-} from "reactstrap";
+import {Container,Row,Col,FormGroup,Input,Button,Label} from "reactstrap";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAdminProfile } from "../features/AdminSlice";
@@ -18,7 +9,6 @@ const AdminProfile = ({ theme }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const admin = useSelector((state) => state.admin.admin);
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,7 +19,6 @@ const AdminProfile = ({ theme }) => {
 
   useEffect(() => {
     if (!admin) return;
-
     setFirstName(admin.firstName || "");
     setLastName(admin.lastName || "");
     setEmail(admin.email || "");
@@ -54,24 +43,20 @@ const AdminProfile = ({ theme }) => {
   const handlePicChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     setProfilePic(file);
-    setPreview(URL.createObjectURL(file)); // preview image
+    setPreview(URL.createObjectURL(file)); 
   };
 
   const handleSave = () => {
     const formData = new FormData();
-
     formData.append("email", email);
     formData.append("firstName", firstName);
     formData.append("lastName", lastName);
     formData.append("dateOfBirth", dateOfBirth);
     formData.append("phone", phone);
-
     if (profilePic instanceof File) {
       formData.append("profilePic", profilePic);
     }
-
     dispatch(updateAdminProfile(formData)).then((res) => {
       if (res.payload?.message === "Success") {
         navigate("/admin/destinations");
@@ -81,7 +66,6 @@ const AdminProfile = ({ theme }) => {
 
 
   const handleCancel = () => navigate("/admin/destinations");
-
   return (
     <Container
       fluid
@@ -116,8 +100,6 @@ const AdminProfile = ({ theme }) => {
                   marginBottom: "10px",
                 }}
               />
-
-              {/* Upload icon */}
               <label
                 htmlFor="adminPicUpload"
                 style={{
@@ -136,7 +118,6 @@ const AdminProfile = ({ theme }) => {
               >
                 <FaCamera style={{ color: "black", fontSize: "18px" }} />  {/* BLACK ICON */}
               </label>
-
               <input
                 id="adminPicUpload"
                 type="file"
@@ -145,13 +126,9 @@ const AdminProfile = ({ theme }) => {
                 style={{ display: "none" }}
               />
             </div>
-
-
             <h3 style={{ fontWeight: "bold", marginBottom: "25px" }}>
               Admin Profile
             </h3>
-
-            {/* Form Fields */}
             <Row>
               <Col md="6">
                 <FormGroup>
@@ -163,7 +140,6 @@ const AdminProfile = ({ theme }) => {
                   />
                 </FormGroup>
               </Col>
-
               <Col md="6">
                 <FormGroup>
                   <Label style={{ fontWeight: "bold" }}>Last Name</Label>
@@ -175,12 +151,10 @@ const AdminProfile = ({ theme }) => {
                 </FormGroup>
               </Col>
             </Row>
-
             <FormGroup>
               <Label style={{ fontWeight: "bold" }}>Email</Label>
               <Input type="email" value={email} disabled />
             </FormGroup>
-
             <FormGroup>
               <Label style={{ fontWeight: "bold" }}>Date of Birth</Label>
               <Input
@@ -189,7 +163,6 @@ const AdminProfile = ({ theme }) => {
                 onChange={(e) => setDateOfBirth(e.target.value)}
               />
             </FormGroup>
-
             <FormGroup>
               <Label style={{ fontWeight: "bold" }}>Phone</Label>
               <Input
@@ -198,8 +171,6 @@ const AdminProfile = ({ theme }) => {
                 onChange={(e) => setPhone(e.target.value)}
               />
             </FormGroup>
-
-            {/* Buttons */}
             <div
               style={{
                 marginTop: "30px",
