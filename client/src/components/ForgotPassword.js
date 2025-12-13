@@ -17,7 +17,6 @@ const ForgotPassword = ({ toggleTheme }) => {
         handleSubmit,
         formState: { errors }
     } = useForm({ resolver: yupResolver(ForgotPasswordValidation) });
-
     const onSubmit = async (data) => {
         try {
             const res = await fetch("http://localhost:8080/forgotPassword", {
@@ -27,9 +26,7 @@ const ForgotPassword = ({ toggleTheme }) => {
                 },
                 body: JSON.stringify({ email: data.email })
             });
-
             const result = await res.json();
-
             alert("If this email exists, a reset link will be shown.");
             if (result.resetLink) {
                 alert("Reset Link:\n" + result.resetLink);
@@ -79,8 +76,6 @@ const ForgotPassword = ({ toggleTheme }) => {
             >
                 {theme.palette.mode === "light" ? <FaMoon /> : <FaSun />}
             </div>
-
-
             <Container fluid>
                 <Row
                     className="justify-content-center align-items-center"
@@ -207,7 +202,6 @@ const ForgotPassword = ({ toggleTheme }) => {
                                 Back to Log in
                             </p>
                         </form>
-
                     </Col>
                 </Row>
             </Container>
